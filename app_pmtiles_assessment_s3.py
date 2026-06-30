@@ -43,6 +43,7 @@ from pmtiles_s3_common import (
     indicator_s3_uri,
     load_pmtiles_info_from_s3,
     parse_s3_uri,
+    public_s3_url,
     run_date_folder,
     s3_object_size,
     start_pmtiles_proxy_url,
@@ -187,6 +188,12 @@ def _cached_polygon_assessment(
     )
 
 
+# When True, stream PMTiles through a local 127.0.0.1 proxy (only works in
+# local development). When False (default), the browser fetches PMTiles
+# directly from the public MinIO URL, which is required for Streamlit Cloud.
+USE_LOCAL_PMTILES_PROXY = False
+
+
 @st.cache_resource(show_spinner="Starting S3 PMTiles proxy…")
 def _cached_pmtiles_proxy_url(bucket: str, key: str) -> str:
     return start_pmtiles_proxy_url(bucket, key)
@@ -196,8 +203,8 @@ PANEL_BLUE = "#1e3a8a"
 FOCCUS_LOGO = Path(__file__).resolve().parent / "FOCCUS_Logo_clean RGB_whiteBG.png"
 if not FOCCUS_LOGO.is_file():
     FOCCUS_LOGO = Path(__file__).resolve().parent / "FOCCUS_Logo_clean RGB.png"
-# Set when the project README is published on GitHub (option 1: external doc link).
-GITHUB_README_URL = ""
+# About page is the first Streamlit page; external GitHub doc link not needed on dashboard.
+# GITHUB_README_URL = ""
 DEMO_TAGLINE = (
     "Interactive GCOAST-GB erosion indicators and polygon-based area assessment "
     "for the German Bight."
@@ -224,7 +231,7 @@ def run_dashboard(*, configure_page: bool = True) -> None:
         """,
         unsafe_allow_html=True,
     )
-    hdr_logo, hdr_text, hdr_link = st.columns([1.1, 5.5, 1.4], vertical_alignment="center")
+    hdr_logo, hdr_text = st.columns([1.1, 6.9], vertical_alignment="center")
     with hdr_logo:
         if FOCCUS_LOGO.is_file():
             st.image(str(FOCCUS_LOGO), width=120)
@@ -233,11 +240,11 @@ def run_dashboard(*, configure_page: bool = True) -> None:
             "**FOCCUS Demonstrator — Management and protection of the coastal area, German Bight**"
         )
         st.caption(DEMO_TAGLINE)
-    with hdr_link:
-        if GITHUB_README_URL:
-            st.link_button("About / documentation", GITHUB_README_URL, use_container_width=True)
-        else:
-            st.caption("Documentation link (GitHub) — set `GITHUB_README_URL` in the app.")
+    # with hdr_link:
+    #     if GITHUB_README_URL:
+    #         st.link_button("About / documentation", GITHUB_README_URL, use_container_width=True)
+    #     else:
+    #         st.caption("Documentation link (GitHub) — set `GITHUB_README_URL` in the app.")
 
     indicator_names = list(INDICATOR_LAYERS)
 
@@ -299,7 +306,16 @@ def run_dashboard(*, configure_page: bool = True) -> None:
             value_attribute=layer_cfg["attribute"],
             attribute_fallbacks=tuple(layer_cfg.get("attribute_fallbacks", ())),
         )
-        pmtiles_url = _cached_pmtiles_proxy_url(p_bucket, p_key)
+        # Serve PMTiles to the browser directly from the public MinIO URL.
+        # The local 127.0.0.1 proxy only works when the browser and the
+        # Streamlit server share a machine (local dev); on Streamlit Cloud the
+        # visitor's browser cannot reach the server's localhost, so the map
+        # would stay empty. The Edito bucket is public, so a direct HTTPS URL
+        # (with Range requests) works both locally and when deployed.
+        if USE_LOCAL_PMTILES_PROXY:
+            pmtiles_url = _cached_pmtiles_proxy_url(p_bucket, p_key)
+        else:
+            pmtiles_url = public_s3_url(p_bucket, p_key)
 
         n_bucket, n_key = parse_s3_uri(nc_uri)
         _load_indicator_nc_cached(n_bucket, n_key)  # warm cache for polygon assessment

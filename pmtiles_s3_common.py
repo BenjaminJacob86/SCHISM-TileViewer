@@ -286,6 +286,17 @@ def parse_s3_uri(s3_uri: str) -> tuple[str, str]:
     return parsed.netloc, parsed.path.lstrip("/")
 
 
+def public_s3_url(bucket: str, key: str) -> str:
+    """Browser-reachable HTTPS URL for a public MinIO/S3 object.
+
+    The PMTiles JS protocol fetches this directly from the user's browser via
+    HTTP Range requests, so it must be a public, internet-reachable URL (the
+    local 127.0.0.1 proxy only works when the browser and server share a
+    machine, i.e. local development — not on Streamlit Cloud).
+    """
+    return f"{ENDPOINT_URL.rstrip('/')}/{bucket}/{key.lstrip('/')}"
+
+
 def run_date_folder(run_date: dt.date) -> str:
     return run_date.strftime("%Y%m%d")
 
