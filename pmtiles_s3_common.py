@@ -268,7 +268,14 @@ class SchismPMTilesLayer(JSCSSMixin, Layer):
         self.style = style
         self.interactive = interactive
         self.pointer_events = pointer_events
-        self._name = layer_name
+        # folium / streamlit-folium derive the layer's JavaScript variable name
+        # from ``_name`` (as ``f"{_name.lower()}_{id}"``). A human label such as
+        # "SSH q95" would inject a space into that identifier, producing invalid
+        # JS like ``ssh q95_1.addTo(map)`` which throws a SyntaxError and aborts
+        # the whole map script (blank map on newer folium). Keep the readable
+        # display name (passed via ``name=``) but use a sanitized identifier here.
+        safe_name = re.sub(r"\W+", "_", layer_name).strip("_") or "schism_layer"
+        self._name = safe_name
 
 
 def _s3_client():
