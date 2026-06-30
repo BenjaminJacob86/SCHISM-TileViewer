@@ -401,6 +401,13 @@ def run_dashboard(*, configure_page: bool = True) -> None:
     MAP_HEIGHT = 340
     THR_HEIGHT = 300
     TOP_PANEL_H = MAP_HEIGHT + 70
+    # Explicit pixel width for the folium maps. We deliberately avoid
+    # st_folium(use_container_width=True): in newer Streamlit (>=1.50) the
+    # st.fragment / fixed-height st.container layout engine reports a width of
+    # 0 at mount, so the map iframe collapses to height 0 and nothing renders
+    # (works locally on older Streamlit, fails on Streamlit Cloud). A concrete
+    # width sidesteps that measurement entirely and renders on every version.
+    MAP_WIDTH = 600
 
     cmap_key = f"cmap_{indicator_label}"
     range_key = f"range_{indicator_label}"
@@ -504,7 +511,7 @@ def run_dashboard(*, configure_page: bool = True) -> None:
             if domain_view:
                 folium.FitBounds([[south, west], [north, east]]).add_to(fm)
             map_state = st_folium(
-                fm, use_container_width=True, height=MAP_HEIGHT, key="indicator_map"
+                fm, width=MAP_WIDTH, height=MAP_HEIGHT, key="indicator_map"
             )
             if not domain_view:
                 st.caption(
@@ -694,7 +701,7 @@ def run_dashboard(*, configure_page: bool = True) -> None:
                         ],
                     )
                     folium.FitBounds([[tsouth, twest], [tnorth, teast]]).add_to(tm)
-                    st_folium(tm, use_container_width=True, height=THR_HEIGHT, key="threshold_map")
+                    st_folium(tm, width=MAP_WIDTH, height=THR_HEIGHT, key="threshold_map")
                 except Exception as exc:
                     st.error(f"Failed to render threshold map: {exc}")
 
