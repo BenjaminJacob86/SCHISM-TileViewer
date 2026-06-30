@@ -1,14 +1,15 @@
-# Dependencies are intentionally left unpinned so Streamlit Cloud can resolve
-# versions compatible with its Python runtime. The folium maps render with an
-# explicit st_folium width (see MAP_WIDTH in app_pmtiles_assessment_s3.py), so
-# the app no longer depends on a specific streamlit / streamlit-folium version.
+# streamlit-folium is pinned: 0.27.x reports an iframe height of 0 when a
+# maplibre-gl-leaflet (PMTiles) layer is on the map, so the indicator map shows
+# up blank on Streamlit Cloud. 0.25.0 renders correctly (verified on Streamlit
+# 1.58). The other dependencies are left unpinned so Streamlit Cloud can resolve
+# versions compatible with its Python runtime.
 rasterio
 numpy
 pillow
 matplotlib
 folium
 streamlit
-streamlit-folium
+streamlit-folium==0.25.0
 boto3
 botocore
 pandas

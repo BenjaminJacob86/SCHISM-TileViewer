@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+.venv/
+.venv-cloud/
+venv/
+env/
+
+# Local backups / scratch
+project_steps_and_backups/
+_cloud_map_test.py
+
+# OS / editor
+.DS_Store
+Thumbs.db
