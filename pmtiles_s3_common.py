@@ -235,11 +235,16 @@ class SchismPMTilesLayer(JSCSSMixin, Layer):
         const pane = {{ this._parent.get_name() }}.getPane("schism_pmtiles_{{ this.get_name() }}");
         pane.style.zIndex = 450;
         pane.style.pointerEvents = {{ this.pointer_events|tojson }};
-        L.maplibreGL({
+        // Assign to a variable named get_name(): newer folium (>=0.16) auto-emits
+        // `{{ this.get_name() }}.addTo(map)` via Layer.render/ElementAddToElement.
+        // Without this var that statement references an undefined identifier and
+        // throws, aborting the rest of the map script (e.g. the Draw control).
+        var {{ this.get_name() }} = L.maplibreGL({
             pane: "schism_pmtiles_{{ this.get_name() }}",
             style: {{ this.style|tojson }},
             interactive: {{ this.interactive|tojson }},
-        }).addTo({{ this._parent.get_name() }});
+        });
+        {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
         {%- endmacro %}
         """
     )
