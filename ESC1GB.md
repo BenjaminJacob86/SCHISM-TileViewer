@@ -18,7 +18,7 @@
 The objective of this demonstrator is to showcase the results of Application 2.1.2.2 ([D8.1](https://docs.google.com/document/d/1AXOMLxra9OLt3CGxj5IWgSxqhNLrOAe-/edit)), which addresses the Environmental and Societal Challenge (ESC) from Topic Group 1: **Coastal Erosion Dynamics** for the German Bight pilot area.
 
 Coastal flooding and erosion are becoming increasingly severe due to extreme storms and rising sea levels. Addressing these challenges requires reliable forecasting tools that accurately represent the hydrodynamic, wave, and sediment-morphodynamic processes driving coastal change. Within ESC1, the [GCOAST-GB](https://www.hereon.de/institutes/coastal_systems_analysis_modeling/research/gcoast/applications/index.php.en) forecasting system has been enhanced and extended across the land–ocean continuum. In addition, this downstream  application (select the dashboard from the sidebar to start the application):
-<img src="ToggleB.png" width="90%">
+<img src="ToggleB.png" width="50%">
 
 has been developed to support coastal risk assessment and adaptation planning.
 
