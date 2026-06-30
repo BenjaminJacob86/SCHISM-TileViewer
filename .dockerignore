@@ -1,0 +1,28 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Python caches / bytecode
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Local virtual environments (do not copy into the image)
+.venv/
+.venv-cloud/
+venv/
+env/
+
+# Local backups / scratch files
+project_steps_and_backups/
+_cloud_map_test.py
+_render_check.py
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Docker files themselves
+Dockerfile
+.dockerignore

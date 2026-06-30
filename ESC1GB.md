@@ -13,7 +13,7 @@
 
 
 
-## Why - Objective and Background ?
+## WHY? - Objective and Background 
 
 The objective of this demonstrator is to showcase the results of Application 2.1.2.2 ([D8.1](https://docs.google.com/document/d/1AXOMLxra9OLt3CGxj5IWgSxqhNLrOAe-/edit)), which addresses the Environmental and Societal Challenge (ESC) from Topic Group 1: **Coastal Erosion Dynamics** for the German Bight pilot area.
 
@@ -36,7 +36,7 @@ This application is aimed at MSCS operators, coastal managers, and stakeholders 
 
 
 
-# WHAT - What is assessed ?
+# WHAT? - What is assessed 
 
 The application evaluates erosion risk based on forecast simulations and allows to quantify the effectiveness of Nature-based Solutions in terms of indicator metrics through  their comparisons between forecast simulations with and without seagrass vegetation.
 
@@ -87,7 +87,7 @@ Users can:
 
 ###  
 
-## HOW - How was this application made and improved within FOCCUS
+## HOW? - How was this application made and improved within FOCCUS
 
 Simulations are performed on an unstructured grid with coastward-increasing resolution (1.5 km to 100 m), enabling the representation of large-scale coastal processes while resolving nearshore dynamics. To assess beach-scale erosion and morphodynamic response, a high-resolution XBeach sub-nest (10 m × 10 m) is implemented. Vegetation effects are explicitly represented in both models, allowing the evaluation of different NbS configurations and their influence on hydrodynamics, wave attenuation, sediment transport, and coastal erosion.
 
